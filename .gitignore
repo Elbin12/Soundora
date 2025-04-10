@@ -1,0 +1,15 @@
+.env
+backend/.env
+
+backend/env/
+
+__pycache__/
+*.pyc
+
+**/migrations/*.py
+!**/migrations/__init__.py
+
+*.log
+
+frontend/node_modules/
+frontend/.env

@@ -12,4 +12,10 @@ class ArtistSerializer(ModelSerializer):
     genres = GenreSerializer(many=True, read_only=True)
     class Meta:
         model = Artists
-        fields = ['id', 'name', 'profile_pic', 'popularity', 'genres', 'followers']
+        fields = ['id', 'name', 'profile_pic', 'popularity', 'genres', 'followers', 'spotify_id']
+
+class ArtistDetailsSerializer(ModelSerializer):
+    genres = GenreSerializer(many=True, read_only=True)
+    class Meta:
+        model = Artists
+        fields = ['id', 'name', 'profile_pic', 'popularity', 'genres', 'followers', 'location', 'spotify_url', 'spotify_id']

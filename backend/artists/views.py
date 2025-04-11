@@ -7,8 +7,8 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework.response import Response
-from .serializers import ArtistSerializer
-from rest_framework.generics import ListAPIView
+from .serializers import ArtistSerializer, ArtistDetailsSerializer
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.pagination import PageNumberPagination
 
 
@@ -42,3 +42,9 @@ class PopularArtists(ListAPIView):
     queryset = Artists.objects.all().order_by('-popularity', 'id')
     pagination_class = ArtistPagination
     
+class Artist(RetrieveAPIView):
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
+    serializer_class = ArtistDetailsSerializer
+    queryset = Artists.objects.all()
+    lookup_field = 'spotify_id'

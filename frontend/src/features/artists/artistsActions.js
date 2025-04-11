@@ -19,3 +19,12 @@ export const popularArtistsAction = createAsyncThunk('popularArtists', async(pag
         return error?.response?.data
     }
 });
+
+export const artistDetails = createAsyncThunk('ArtistDetails', async(spotify_id, {rejectWithValue})=>{
+    try{
+        const response = await axiosInstance.get(`${URLS["artist"]}${spotify_id}/`)
+        return response.data;
+    }catch(error){
+        return error?.response?.data
+    }
+});

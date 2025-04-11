@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { popularArtistsAction, searchArtists } from "./ArtistsActions";
+import { artistDetails, popularArtistsAction, searchArtists } from "./ArtistsActions";
 import { handlePending, handleRejected } from "../utils";
 
 
 const initialState = {
     'artists': [],
     'popularArtists':[],
+    'selectedArtist': {},
+    'isSearch':false,
     'success': false,
     'loading': false,
     'error': '',
@@ -18,6 +20,9 @@ const artistsSlice = createSlice({
     reducers:{
         setArtists: (state, action)=>{
             state.artists = action?.payload;
+        },
+        setIsSearch: (state, action)=>{
+            state.isSearch = action.payload;
         }
     },
     extraReducers(builder){
@@ -35,10 +40,24 @@ const artistsSlice = createSlice({
         .addCase(popularArtistsAction.fulfilled, (state, action)=>{
             state.loading = false;
             state.success = true;
-            state.popularArtists = [...state.popularArtists, ...action?.payload.results];
+            const uniqueArtists = [
+                ...new Map(
+                  [...state.popularArtists, ...action.payload.results].map(artist => [artist.id, artist])
+                ).values()
+              ];
+              
+            state.popularArtists = uniqueArtists;
+        })
+
+        .addCase(artistDetails.pending, handlePending)
+        .addCase(artistDetails.rejected, handleRejected)
+        .addCase(artistDetails.fulfilled, (state, action)=>{
+            state.success = true;
+            state.loading = false;
+            state.selectedArtist = action?.payload;
         })
     }
 })
 
-export const {setArtists} = artistsSlice.actions
+export const {setArtists, setIsSearch} = artistsSlice.actions
 export default artistsSlice.reducer
